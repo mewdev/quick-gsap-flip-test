@@ -1,0 +1,47 @@
+---
+// src/pages/talent.astro
+import { Flip } from "gsap/Flip";
+const itemId = Astro.url.searchParams.get("item");
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talent Item</title>
+  <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+  <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      gsap.registerPlugin(Flip);
+
+      const state = JSON.parse(window.localStorage.getItem('flipState'));
+
+      window.addEventListener('scroll', () => {
+        const talentsSection = document.querySelector('#talents');
+        const bottomOfTalents = talentsSection.offsetTop + talentsSection.offsetHeight;
+        if (window.scrollY + window.innerHeight >= bottomOfTalents) {
+          window.location.href = `/#talents`;
+          Flip.from(state, { duration: 1, ease: 'power1.inOut' });
+        }
+      });
+    });
+  </script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="talent-item bg-white p-8 shadow-md rounded-md">
+      <h1 class="text-4xl font-bold">Talent Item {itemId}</h1>
+      <p class="mt-4">Details about Talent {itemId}...</p>
+    </div>
+  </div>
+  <section id="talents" class="min-h-screen flex flex-col items-center justify-center bg-red-100">
+    <h1 class="text-4xl font-bold mb-8">Talents</h1>
+    <ul class="space-y-4">
+      <li class="talent-item cursor-pointer bg-white p-4 shadow-md rounded-md" data-id="1"><a href="/talent">Talent 1</a></li>
+      <li class="talent-item cursor-pointer bg-white p-4 shadow-md rounded-md" data-id="2">Talent 2</li>
+      <li class="talent-item cursor-pointer bg-white p-4 shadow-md rounded-md" data-id="3">Talent 3</li>
+    </ul>
+  </section>
+</body>
+</html>
